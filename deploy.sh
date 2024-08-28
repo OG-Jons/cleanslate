@@ -44,7 +44,7 @@ docker compose -f $COMPOSE_FILE build
 docker compose -f $COMPOSE_FILE down --remove-orphans -t=0
 docker compose -f $COMPOSE_FILE up -d
 
-if [[ $1 != "DISABLE_CADDY" ]]; then
+if [[ $1 != "ENABLE_CADDY" ]]; then
     sudo caddy stop
     sudo caddy start
 else
