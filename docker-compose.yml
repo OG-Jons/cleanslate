@@ -38,6 +38,7 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.fit_marschall_pro_router.rule=Host(`${NEXT_PUBLIC_HASURA_DOMAIN}`)"
       - "traefik.http.routers.fit_marschall_pro_router.entrypoints=web"
       - "traefik.http.routers.fit_marschall_pro_router.middlewares=fit_marschall_pro_headers"
@@ -97,6 +98,18 @@ services:
       - graphql-server
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.gzip.compress=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.http_0.entryPoints=http"
+      - "traefik.http.routers.http_0.middlewares=redirect-to-https"
+      - "traefik.http.routers.http_0.rule=Host(`fit.marschall.pro`) && PathPrefix(`/`)"
+      - "traefik.http.routers.https_0.entryPoints=https"
+      - "traefik.http.routers.https_0.middlewares=gzip"
+      - "traefik.http.routers.https_0.rule=Host(`fit.marschall.pro`) && PathPrefix(`/`)"
+      - "traefik.http.routers.https_0.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.https_0.tls=true"
 
 volumes:
   database:
